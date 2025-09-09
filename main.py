@@ -37,6 +37,11 @@ def setModoRotacao():
     modoAtual = "Rotação"
     updateStatus("Digite em graus o quanto deseja rotacionar os elementos")
 
+def setModoEscala():
+    global modoAtual
+    modoAtual = "Escala"
+    updateStatus("Escolha a escala")
+
 def setModoReflexao():
     global modoAtual
     modoAtual = "Reflexão"
@@ -81,6 +86,35 @@ def getRotation():
     dialog.focus_set()
     dialog.wait_window()
 
+def getEscala():
+    
+    dialog = tk.Toplevel()
+    dialog.title("Escala")
+    
+    dialog.grab_set()
+    
+    tk.Label(dialog, text="Escala:").pack(padx=10, pady=5)
+    
+    angulo = tk.Entry(dialog)
+    angulo.pack(padx=10, pady=5)
+    
+    # O botão de confirmar vai chamar uma função que lida com a rotação
+    def on_confirm():
+        try:
+            result = float(angulo.get())
+            dialog.destroy()
+            # Chama a função principal de rotação
+            modoEscala(result)
+        except ValueError:
+            tk.messagebox.showerror("Erro! Insira um número válido.")
+            
+    tk.Button(dialog, text="OK", command=on_confirm).pack(pady=10)
+    
+    # Mantém o foco no diálogo
+    dialog.focus_set()
+    dialog.wait_window()
+
+
 def getReflexao():
     dialog = tk.Toplevel()
     dialog.title("Tipo de Reflexão")
@@ -121,7 +155,6 @@ def pintaLinha(linha, cor):
 
     for i in range(0,len(coordenadas)):
         x, y = coordenadas[i]
-        #print("("+ str(x) +","+ str(y) +")")
         pintaPixel(x,y,cor)
 
 def pintaCirculo(c1,c2,r1,r2,cor):
@@ -129,7 +162,6 @@ def pintaCirculo(c1,c2,r1,r2,cor):
 
     for i in range(0,len(coordenadas)):
         x, y = coordenadas[i]
-        print("("+ str(x) +","+ str(y) +")")
         pintaPixel(x,y,cor)
 
 
@@ -137,7 +169,7 @@ def limpaLinha(x1,y1,x2,y2):
     linha = o.Linha(x1,y1,x2,y2)
     pintaLinha(linha,"#0E1D24")
 
-    ##Sefor uma linha inteira, ele irá excluir o seu todo do elemento
+    ##Se for uma linha inteira, ele irá excluir o seu todo do elemento
     for i in range(0,len(elementosNaTela)):
         if(elementosNaTela[i].getTipo() == "linha"):
             linha = elementosNaTela[i]
@@ -156,9 +188,9 @@ def limpaCirculo(x1,y1,raio):
             xi = circulo.getCentro().getX()
             yi = circulo.getCentro().getY()
             raioi = circulo.getRaio()
-        if(x1 == xi and y1 == yi and raioi == raio):
-            elementosNaTela.pop(i)
-            pintaCirculo(x1,y1,x1+raio,y1,"#0E1D24")
+            if(x1 == xi and y1 == yi and raioi == raio):
+                elementosNaTela.pop(i)
+                pintaCirculo(x1,y1,x1+raio,y1,"#0E1D24")
             return
 
 def modoLinha(event):
@@ -170,7 +202,6 @@ def modoLinha(event):
 
     #Adiciona o ponto na tela
     points.append((event.x, event.y))
-    print("Ponto" + str(len(points)) +" : " + str(event.x) + "," + str(event.y))
 
     updateStatus("Clique novamente para poder adicionar o segundo ponto")
 
@@ -194,7 +225,6 @@ def modoCirculo(event):
 
     #Adiciona o ponto na tela
     points.append((event.x, event.y))
-    print("Ponto" + str(len(points)) +" : " + str(event.x) + "," + str(event.y))
 
     updateStatus("Clique novamente para definir o raio do círculo")
     if len(points) % 2 == 0:
@@ -216,7 +246,6 @@ def modoSelecionar(event):
 
     #Adiciona o ponto na tela
     pontoSelecao.append((event.x, event.y))
-    print("Ponto" + str(len(pontoSelecao)) +" : " + str(event.x) + "," + str(event.y))
 
     updateStatus("Clique novamente para definir onde será a outra diagonal da área de seleção")
 
@@ -284,6 +313,13 @@ def modoTranslacao(event):
     pontoMov.append((event.x, event.y))
     xMov,yMov = pontoMov[0]
 
+    #Limpa a caixa de seleção da tela
+    pintaLinha(o.Linha(xmin,ymin,xmin,ymax),"#0E1D24")
+    pintaLinha(o.Linha(xmin,ymin,xmax,ymin),"#0E1D24")
+    pintaLinha(o.Linha(xmax,ymin,xmax,ymax),"#0E1D24")
+    pintaLinha(o.Linha(xmin,ymax,xmax,ymax),"#0E1D24")
+
+
     ##Irá se movimentar com base no centro do retangulo de seleção
     xCentro= round(xmin + (xmax-xmin)/2)
     yCentro= round(ymin + (ymax-ymin)/2)
@@ -306,9 +342,6 @@ def modoTranslacao(event):
             y1 = y1 + yDif
             x2 = x2 + xDif 
             y2 = y2 + yDif 
-
-            print("Nova posição Inicial: ("+str(x1)+","+str(y1)+")")
-            print("Nova posição Final: ("+str(x2)+","+str(y2)+")")
 
             linha = o.Linha(x1,y1,x2,y2)
             pintaLinha(linha,"white")
@@ -341,6 +374,13 @@ def modoRotacao(angulo):
         updateStatus("É preciso selecionar um elemento primeiro!")
         return
     
+    #Limpa a caixa de seleção da tela
+    pintaLinha(o.Linha(xmin,ymin,xmin,ymax),"#0E1D24")
+    pintaLinha(o.Linha(xmin,ymin,xmax,ymin),"#0E1D24")
+    pintaLinha(o.Linha(xmax,ymin,xmax,ymax),"#0E1D24")
+    pintaLinha(o.Linha(xmin,ymax,xmax,ymax),"#0E1D24")
+
+
     ##O centro do retângulo é o pivô de rotação dos elementos
     xPivo= round(xmin + (xmax-xmin)/2)
     yPivo= round(ymin + (ymax-ymin)/2)
@@ -391,8 +431,6 @@ def modoRotacao(angulo):
             x1 = x1_rot + xPivo
             y1 = y1_rot + yPivo
 
-            print("Nova posição: ("+str(x1)+","+str(y1)+")")
-
             circulo = o.Circulo(round(x1),round(y1),raio)
             pintaCirculo(x1,y1,x1+raio,y1,"white")
             elementosNaTela.append(circulo)
@@ -401,6 +439,16 @@ def modoRotacao(angulo):
     elementosSelecionados.clear()
              
 def modoReflexao(opcao):
+
+    if(len(elementosSelecionados)<1): 
+        updateStatus("É preciso selecionar um elemento primeiro!")
+        return
+
+    #Limpa a caixa de seleção da tela
+    pintaLinha(o.Linha(xmin,ymin,xmin,ymax),"#0E1D24")
+    pintaLinha(o.Linha(xmin,ymin,xmax,ymin),"#0E1D24")
+    pintaLinha(o.Linha(xmax,ymin,xmax,ymax),"#0E1D24")
+    pintaLinha(o.Linha(xmin,ymax,xmax,ymax),"#0E1D24")
 
     #O centro do retangulo de seleção será a base X/Y para espelhamento
     xCentro= round(xmin + (xmax-xmin)/2)
@@ -452,14 +500,67 @@ def modoReflexao(opcao):
                     x1 = x1 + 2*(xCentro-x1) if xCentro >= x1  else x1 - 2*(xCentro-x1)
                     y1 = y1 + 2*(yCentro-y1) if xCentro >= y1  else y1 - 2*(xCentro-y1)
 
-            print("Nova posição: ("+str(x1)+","+str(y1)+")")
-
             circulo = o.Circulo(round(x1),round(y1),raio)
             pintaCirculo(x1,y1,x1+raio,y1,"white")
             elementosNaTela.append(circulo)
             updateStatus("")
 
     elementosSelecionados.clear()    
+
+def modoEscala(escala):
+
+    if(len(elementosSelecionados)<1): 
+        updateStatus("É preciso selecionar um elemento primeiro!")
+        return
+
+    #Limpa a caixa de seleção da tela
+    pintaLinha(o.Linha(xmin,ymin,xmin,ymax),"#0E1D24")
+    pintaLinha(o.Linha(xmin,ymin,xmax,ymin),"#0E1D24")
+    pintaLinha(o.Linha(xmax,ymin,xmax,ymax),"#0E1D24")
+    pintaLinha(o.Linha(xmin,ymax,xmax,ymax),"#0E1D24")
+
+    #O centro do retangulo de seleção será a base X/Y para a escala
+    xCentro= round(xmin + (xmax-xmin)/2)
+    yCentro= round(ymin + (ymax-ymin)/2)
+
+    for i in range (0,len(elementosSelecionados)):
+        if(elementosSelecionados[i].getTipo() == "linha"):
+            #Limpa o elemento atual do quadro
+            linha = elementosSelecionados[i]
+            x1 = linha.getInicial().getX()
+            y1 = linha.getInicial().getY()
+            x2 = linha.getFinal().getX()
+            y2 = linha.getFinal().getY()
+            limpaLinha(x1,y1,x2,y2)
+
+            x1 = round((x1 - xCentro) * escala + xCentro)
+            x2 = round((x2 - xCentro) * escala + xCentro)
+            y1 = round((y1 - yCentro) * escala + yCentro)
+            y2 = round((y2 - yCentro) * escala + yCentro)
+
+            linha = o.Linha(x1,y1,x2,y2)
+            pintaLinha(linha,"white")
+            elementosNaTela.append(linha)
+            updateStatus("")
+
+
+        elif(elementosSelecionados[i].getTipo() == "circulo"):
+            circulo = elementosSelecionados[i]
+            #Limpa o elemento atual do quadro
+            x1 = circulo.getCentro().getX()
+            y1 = circulo.getCentro().getY()
+            raio = circulo.getRaio()
+            limpaCirculo(x1,y1,raio)
+
+            # No circulo, a escala é calculada pelo seu raio
+            raio = raio * escala
+
+            circulo = o.Circulo(round(x1),round(y1),raio)
+            pintaCirculo(x1,y1,x1+raio,y1,"white")
+            elementosNaTela.append(circulo)
+            updateStatus("")
+        
+    elementosSelecionados.clear()
 
 
 # Mapeia os modos para as funções de tratamento
@@ -469,7 +570,8 @@ modoHandlers = {
     "Selecionar": modoSelecionar,
     "Translação": modoTranslacao,
     "Rotação": modoRotacao,
-    "Reflexão": modoReflexao
+    "Reflexão": modoReflexao,
+    "Escala": modoEscala
 }
 
 def on_click(event):
@@ -502,9 +604,10 @@ def main():
 
     menubar.add_cascade(label="Transformações", menu=transfmenu)
 
-    transfmenu.add_command(label="Translação", command=setModoTranslacao)
+    transfmenu.add_command(label="Escala", command=getEscala)
     transfmenu.add_command(label="Rotação", command=getRotation)
     transfmenu.add_command(label="Reflexão", command=getReflexao)
+    transfmenu.add_command(label="Translação", command=setModoTranslacao)
 
     tela = tk.Canvas(root, width=LARGURA, height=ALTURA, bg="#0E1D24", highlightthickness=1, highlightbackground="white")
     tela.pack(pady=10, padx=10)

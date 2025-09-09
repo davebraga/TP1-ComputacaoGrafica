@@ -58,9 +58,6 @@ def bresenhamCirculo(xCentro, yCentro, xRaio,yRaio):
 
     raio =  distancia(xCentro, yCentro, xRaio,yRaio) 
     coordenadas = []
-    print("X Centro: " + str(xCentro))
-    print("Y Centro: " + str(yCentro))
-    print("Raio: " + str(raio))
     x = 0
     y = raio
     p = 3 - 2 * raio
@@ -88,8 +85,6 @@ def bresenhamCirculo(xCentro, yCentro, xRaio,yRaio):
     return coordenadas
 
 ##Código para o recorte usando o algoritmo de Liang-Barsky. Baseado no algoritmo passado durante a aula
-
-
 def liangBarsky(x1,y1,x2,y2,xmin,ymin,xmax,ymax):
     u1=0.0
     u2=1.0
