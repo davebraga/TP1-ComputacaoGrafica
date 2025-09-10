@@ -1,0 +1,44 @@
+INSTRUÇÕES DE USO
+
+1 - LINHA
+ - Para criar uma linha, selecione a opção "Linha" na barra superior do quadro
+ - Após clicar, selecione onde na tela ficará o primeiro ponto
+ - Em seguida, selecione onde na tela ficará o segundo ponto
+ - A linha irá aparecer na tela
+
+2 - CÍRCULO
+ - Para criar um circulo, selecione a opção "Circulo" na barra superior do quadro
+ - Após clicar, selecione onde na tela ficará o centro do circulo
+ - O raio do círculo será com base na distância do primeiro para o segundo ponto
+ - O círculo irá aparecer na tela
+
+3 - SELECIONAR
+ - Para criar um objeto, selecione a opção "Selecionar" na barra superior do quadro
+ - Após clicar, selecione onde na tela ficará a diagonal do retângulo de seleção
+ - Em seguida, selecione onde na tela ficará a diagonal oposta do retângulo de seleção
+  - O retângulo de seleção irá aparecer na tela. Objetos que estiverem dentro dele irão mudar de cor para amarelo
+
+4 - TRANSFORMAÇÕES
+
+ ATENÇÃO: antes de realizar uma ação de transformação, é preciso primeiro selecionar a área usando a ferramenta "Selecioanr"!
+
+ a - ESCALA
+    - Para alterar a escala do objeto, selecione a opção "Escala" dentro do menu de "Transformações"
+    - Irá aparecer um pop-up solicitando digitar o valor da escala
+    - Clique em "Ok" no pop-up
+    - A escala será feita com base no centro do retângulo de seleção
+ 
+ b - ROTAÇÃO
+    - Para rotacionar o objeto, selecione a opção "Rotação" dentro do menu de "Transformações"
+    - Irá aparecer um pop-up solicitando digitar o valor em graus da rotação
+    - Clique em "Ok" no pop-up
+    - A rotação será feita com base no centro do retângulo de seleção
+ 
+ c - REFLEXÃO
+    - Para refletir o objeto, selecione a opção "Reflexão" dentro do menu de "Transformações"
+    - Irá aparecer um pop-up solicitando escolher entre X , Y ou XY
+    - A reflexão será feita com o ponto (0,0) no centro do retângulo de seleção
+
+  d - TRANSLAÇÃO
+    - Para mover o objeto, selecione a opção "Translação" dentro do menu de "Transformações"
+    - Após clicar, selecione para onde deseja mover os objetos dentro do retângulo de seleção
